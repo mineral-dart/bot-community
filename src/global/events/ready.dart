@@ -11,17 +11,17 @@ class Ready extends MineralEvent {
 
     List<String> status = [
       "github.com/mineral-dart",
-      "pub.dev/packages/mineral"
+      "pub.dev/packages/mineral",
+      "Flasheberg ❤"
     ];
 
-    bool sentence = false;
+    int sentence = 0;
     Timer.periodic(Duration(seconds: 45), (timer) {
-      sentence = !sentence;
+      sentence = sentence >= status.length ? 1 : sentence + 1;
       client.setPresence(
-        status: ClientStatus.online,
-        activity: ClientActivity(name: sentence ? status[0] : status[1], type: GamePresence.watching)
+          status: ClientStatus.online,
+          activity: ClientActivity(name: status[sentence - 1], type: GamePresence.watching)
       );
     });
   }
 }
-    

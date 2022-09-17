@@ -4,7 +4,6 @@ import 'package:mineral/core.dart';
 @Event(Events.voiceConnect, customId: '1018150017938227212')
 class VoiceConnect extends MineralEvent {
   Future<void> handle (GuildMember member, VoiceChannel? before, VoiceChannel after) async {
-    final Environment environment = ioc.singleton(ioc.services.environment);
     final String categoryId = environment.get('VOICE_CATEGORY')!;
 
     final Guild guild = member.guild;
@@ -19,4 +18,3 @@ class VoiceConnect extends MineralEvent {
     member.voice.move(channel.id);
   }
 }
-    
