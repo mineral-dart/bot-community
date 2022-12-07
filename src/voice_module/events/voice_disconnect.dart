@@ -1,12 +1,12 @@
-import 'package:mineral/api.dart';
-import 'package:mineral/core.dart';
+import 'package:mineral/core/events.dart';
+import 'package:mineral/core/extras.dart';
+import 'package:mineral/framework.dart';
 
-@Event(Events.voiceDisconnect)
-class VoiceDisconnect extends MineralEvent {
-  Future<void> handle (GuildMember member, VoiceChannel before) async {
+class VoiceDisconnect extends MineralEvent<VoiceLeaveEvent> with MineralContext {
+  Future<void> handle (VoiceLeaveEvent event) async {
     final String categoryId = environment.get('VOICE_CATEGORY')!;
-    if(before.parent?.id != categoryId || before.id == environment.get('VOICE_CHANNEL')) return;
+    if(event.channel.parent?.id != categoryId || event.channel.id == environment.get('VOICE_CHANNEL')) return;
 
-    if(before.members.length <= 0) await before.delete();
+    if(event.channel.members.length <= 0) await event.channel.delete();
   }
 }

@@ -1,20 +1,24 @@
-import 'package:mineral/api.dart';
-import 'package:mineral/core.dart';
+import 'package:mineral/core/api.dart';
+import 'package:mineral/core/builders.dart';
+import 'package:mineral/core/events.dart';
+import 'package:mineral/core/extras.dart';
+import 'package:mineral/framework.dart';
 
-@Event(Events.voiceConnect, customId: '1018150017938227212')
-class VoiceConnect extends MineralEvent {
-  Future<void> handle (GuildMember member, VoiceChannel? before, VoiceChannel after) async {
+class VoiceConnect extends MineralEvent<VoiceJoinEvent> with MineralContext {
+
+  Future<void> handle (VoiceJoinEvent event) async {
+    if (event.after.id != environment.get('VOICE_CHANNEL')) return;
     final String categoryId = environment.get('VOICE_CATEGORY')!;
 
-    final Guild guild = member.guild;
+    final Guild guild = event.member.guild;
 
     final VoiceChannel? channel = await guild.channels.create(ChannelBuilder.fromVoiceChannel(
-      label: 'Salon de ${member.nickname}',
+      label: 'Salon de ${event.member.nickname}',
       parentId: categoryId,
-      permissions: [PermissionOverwrite(id: member.id, type: PermissionOverwriteType.member, allow: [Permission.manageChannels], deny: [])]
+      permissions: [PermissionOverwrite(id: event.member.id, type: PermissionOverwriteType.member, allow: [Permission.manageChannels], deny: [])]
     ));
 
-    if(channel == null) return member.voice.disconnect();
-    member.voice.move(channel.id);
+    if(channel == null) return event.member.voice.disconnect();
+    await event.member.voice.move(channel.id);
   }
 }
