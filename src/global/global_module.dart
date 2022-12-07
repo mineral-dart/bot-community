@@ -1,14 +1,16 @@
-import 'package:mineral/core.dart';
-
+import 'package:mineral/framework.dart';
 import 'events/accept_rules.dart';
 import 'events/ready.dart';
 import 'role_command.dart';
 
-@Module(identifier: 'global_module', label: 'Global module')
 class GlobalModule extends MineralModule {
+  GlobalModule (): super('global_module', 'Global module', 'description');
+
   @override
   Future<void> init() async {
-    events.register([AcceptRules(), Ready()]);
     commands.register([RoleCommand()]);
+    events.register([AcceptRules(), Ready()]);
+    contextMenus.register([]);
+    states.register([]);
   }
 }
