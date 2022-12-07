@@ -1,14 +1,16 @@
-import 'package:mineral/api.dart';
-import 'package:mineral/core.dart';
+import 'package:mineral/core/api.dart';
+import 'package:mineral/core/events.dart';
+import 'package:mineral/framework.dart';
+import 'package:mineral/core/extras.dart';
 
-@Event(Events.acceptRules)
-class AcceptRules extends MineralEvent {
-  Future<void> handle (GuildMember member) async {
+class AcceptRules extends MineralEvent<AcceptRulesEvent> with MineralContext {
+
+  Future<void> handle (AcceptRulesEvent event) async {
     final Snowflake? roleId = environment.get('BASE_MEMBER_ROLE');
     if (roleId != null) {
       return;
     }
 
-    await member.roles.add(roleId!);
+    await event.member.roles.add(roleId!);
   }
 }

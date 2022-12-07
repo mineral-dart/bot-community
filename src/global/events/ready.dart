@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:mineral/api.dart';
-import 'package:mineral/console.dart';
-import 'package:mineral/core.dart';
+import 'package:mineral/core/api.dart';
+import 'package:mineral/core/events.dart';
+import 'package:mineral/core/extras.dart';
+import 'package:mineral/framework.dart';
 
-@Event(Events.ready)
-class Ready extends MineralEvent {
-  Future<void> handle (MineralClient client) async {
+class Ready extends MineralEvent<ReadyEvent> with MineralContext {
+  Future<void> handle (ReadyEvent event) async {
     Console.success(message: "Bot started!");
 
     List<String> status = [
